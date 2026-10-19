@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+  h2:
+    console:
+      enabled: false # Never expose H2 console in production!
+  datasource:
+    url: ${DB_URL:jdbc:h2:file:./data/shop-prod;DB_CLOSE_DELAY=-1}
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD:secret}
+
+shop:
+  currency: "EUR"
+  tax-rate: 0.20
+  low-stock-threshold: 5
+
+logging:
+  level:
+    edu.itc.se.shop: INFO
+    edu.itc.shop: INFO

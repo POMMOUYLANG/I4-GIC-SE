@@ -13,8 +13,35 @@ spring:
   sql:
     init:
       mode: always # Always execute schema.sql and data.sql on startup
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+
+shop:
+  currency: "USD"
+  tax-rate: 0.10
+  low-stock-threshold: 15
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,loggers
+  endpoint:
+    health:
+      show-details: always
+
+info:
+  app:
+    name: "Shop Application"
+    version: "0.0.1-SNAPSHOT"
+    description: "Software Engineering Lab 02 Order Management"
 
 logging:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [%X{requestId}] %logger{36} : %msg%n"
   level:
+    edu.itc.se.shop: DEBUG
     org.springframework.jdbc: DEBUG
     org.springframework.transaction: DEBUG

@@ -26,8 +26,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidationErrors(MethodArgumentNotValidException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.BAD_REQUEST, "Invalid request content"
-        );
+                HttpStatus.BAD_REQUEST, "Invalid request content");
         problem.setTitle("Bad Request");
 
         List<Map<String, String>> fieldErrors = ex.getBindingResult()
@@ -35,8 +34,7 @@ public class ApiExceptionHandler {
                 .stream()
                 .map(err -> Map.of(
                         "field", err.getField(),
-                        "message", err.getDefaultMessage() == null ? "Invalid" : err.getDefaultMessage()
-                ))
+                        "message", err.getDefaultMessage() == null ? "Invalid" : err.getDefaultMessage()))
                 .toList();
 
         problem.setProperty("errors", fieldErrors);
@@ -46,6 +44,13 @@ public class ApiExceptionHandler {
     // 2. Resource Not Found (404 Not Found)
     @ExceptionHandler(ProductNotFoundException.class)
     public ProblemDetail handleNotFound(ProductNotFoundException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problem.setTitle("Not Found");
+        return problem;
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ProblemDetail handleNoResourceFound(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problem.setTitle("Not Found");
         return problem;
@@ -63,8 +68,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public ProblemDetail handleDuplicateKey(DuplicateKeyException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.CONFLICT, "A product with this name already exists"
-        );
+                HttpStatus.CONFLICT, "A product with this name already exists");
         problem.setTitle("Conflict");
         return problem;
     }
@@ -75,8 +79,7 @@ public class ApiExceptionHandler {
     public ProblemDetail handleGenericException(Exception ex) {
         log.error("Unhandled internal server error occurred", ex);
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR, "An internal server error occurred. Please contact support."
-        );
+                HttpStatus.INTERNAL_SERVER_ERROR, "An internal server error occurred. Please contact support.");
         problem.setTitle("Internal Server Error");
         return problem;
     }
