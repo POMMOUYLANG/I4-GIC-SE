@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,8 +64,8 @@ class OrderRepositoryTest {
         em.flush();
         em.clear();
 
-        Page<OrderSummary> page = orderRepository.findByStatus(OrderStatus.PAID, PageRequest.of(0, 10));
-        assertThat(page.getContent()).isNotEmpty();
-        assertThat(page.getContent()).extracting(s -> s.getCustomer().getName()).contains("Grace");
+        Optional<OrderSummary> summary = orderRepository.findSummaryById(o.getId());
+        assertThat(summary).isPresent();
+        assertThat(summary.get().getCustomer().getName()).isEqualTo("Grace");
     }
 }

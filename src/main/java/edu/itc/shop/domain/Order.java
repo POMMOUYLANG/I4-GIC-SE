@@ -1,6 +1,7 @@
 package edu.itc.shop.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.BatchSize;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class Order {
     private Instant placedAt = Instant.now();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @BatchSize(size = 16)
     private List<OrderLine> lines = new ArrayList<>();
 
     @Version
