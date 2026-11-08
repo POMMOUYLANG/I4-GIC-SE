@@ -60,7 +60,7 @@ public class Order {
     }
 
     public List<OrderLine> getLines() {
-        return Collections.unmodifiableList(lines);
+        return lines;
     }
 
     public Money total() {
