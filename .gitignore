@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Backups & Other Labs
+.git_backups/
+lab0*/
+
