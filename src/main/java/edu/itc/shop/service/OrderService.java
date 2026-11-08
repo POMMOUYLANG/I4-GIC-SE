@@ -31,6 +31,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public void wrongReadOnlyModification(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow();
+        order.setStatus(OrderStatus.SHIPPED);
+    }
+
+    @Transactional(readOnly = true)
     public List<OrderDto> findOrdersByCustomerEmail(String email) {
         return orderRepository.findWithLinesByCustomerEmail(email).stream()
             .map(OrderDto::from)
