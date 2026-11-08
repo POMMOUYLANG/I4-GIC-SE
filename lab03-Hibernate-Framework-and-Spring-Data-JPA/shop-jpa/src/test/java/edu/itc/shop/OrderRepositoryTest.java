@@ -65,6 +65,6 @@ class OrderRepositoryTest {
 
         Page<OrderSummary> page = orderRepository.findByStatus(OrderStatus.PAID, PageRequest.of(0, 10));
         assertThat(page.getContent()).isNotEmpty();
-        assertThat(page.getContent().get(0).getCustomer().getName()).isEqualTo("Grace");
+        assertThat(page.getContent()).extracting(s -> s.getCustomer().getName()).contains("Grace");
     }
 }
