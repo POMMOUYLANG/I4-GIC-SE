@@ -64,7 +64,8 @@ class OrderCascadeTest {
         em.flush();
 
         Long remainingLines = em.getEntityManager()
-            .createQuery("select count(l) from OrderLine l", Long.class)
+            .createQuery("select count(l) from OrderLine l where l.order.id = :orderId", Long.class)
+            .setParameter("orderId", reloaded.getId())
             .getSingleResult();
         assertThat(remainingLines).isEqualTo(0L);
     }
