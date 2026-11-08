@@ -6,12 +6,17 @@
     "**/CVS": true,
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
-    "lab01-multithreading": true,
-    "lab02-SpringFramework": true,
-    "lab03-Hibernate-Framework-and-Spring-Data-JPA": true,
-    "lab04": true,
-    "lab05": true,
-    "lab06": true,
-    ".git_backups": true
+    "lab01*": true,
+    "**/lab01*": true,
+    "lab02*": true,
+    "**/lab02*": true,
+    "lab03*": true,
+    "**/lab03*": true,
+    "Lab0*": true,
+    "**/Lab0*": true,
+    "pdf": true,
+    "**/pdf": true,
+    ".git_backups": true,
+    "**/.git_backups": true
   }
 }
