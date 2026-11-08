@@ -55,6 +55,7 @@ public class DataSeeder implements ApplicationRunner {
             Product p = new Product("SKU-" + i, "Product " + i, Money.eur(String.valueOf(10 + i * 5)), cat, 20 + i);
             if (i % 2 == 0) p.tag(tagSale);
             if (i % 3 == 0) p.tag(tagNew);
+            if (i % 4 == 0) p.tag(tagPro);
             prodList.add(p);
         }
         products.saveAll(prodList);
