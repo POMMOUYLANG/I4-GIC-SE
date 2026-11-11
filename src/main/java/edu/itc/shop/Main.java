@@ -1,13 +1,18 @@
 package edu.itc.shop;
 
 import java.net.URI;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import jakarta.ws.rs.core.GenericType;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.inject.hk2.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import edu.itc.shop.api.OrderResource;
 import edu.itc.shop.domain.InMemoryProductRepository;
 import edu.itc.shop.domain.InMemoryReviewRepository;
+import edu.itc.shop.domain.OrderService;
 import edu.itc.shop.domain.ProductRepository;
 import edu.itc.shop.domain.ProductService;
 import edu.itc.shop.domain.ReviewRepository;
@@ -20,6 +25,8 @@ public class Main {
         var repo = new InMemoryProductRepository();
         var service = new ProductService(repo);
         var reviews = new InMemoryReviewRepository();
+        var orders = new OrderService(repo);
+        ConcurrentMap<String, OrderResource.Stored> idempotency = new ConcurrentHashMap<>();
         return new ResourceConfig()
                 .packages("edu.itc.shop.api")
                 .register(new AbstractBinder() {
@@ -28,6 +35,8 @@ public class Main {
                         bind(repo).to(ProductRepository.class);
                         bind(service).to(ProductService.class);
                         bind(reviews).to(ReviewRepository.class);
+                        bind(orders).to(OrderService.class);
+                        bind(idempotency).to(new GenericType<ConcurrentMap<String, OrderResource.Stored>>() {});
                     }
                 });
     }

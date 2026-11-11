@@ -28,7 +28,9 @@ public class ProblemMapper implements ExceptionMapper<Throwable> {
         if (ex instanceof WebApplicationException w) {
             int status = w.getResponse().getStatus();
             Response.StatusType info = w.getResponse().getStatusInfo();
-            String title = info != null ? info.getReasonPhrase() : "Error";
+            String title = (info != null && info.getReasonPhrase() != null && !info.getReasonPhrase().isBlank())
+                    ? info.getReasonPhrase()
+                    : (status == 422 ? "Unprocessable Content" : "Error");
             String detail = extractDetail(w, title);
             var problem = new Problem("about:blank", title, status, detail, path);
             return Response.status(status)

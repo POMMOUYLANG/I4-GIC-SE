@@ -10,4 +10,7 @@ public record Product(
         int stock,
         int version
 ) {
+    public Product withStock(int newStock) {
+        return new Product(id, name, sku, price, newStock, version);
+    }
 }
