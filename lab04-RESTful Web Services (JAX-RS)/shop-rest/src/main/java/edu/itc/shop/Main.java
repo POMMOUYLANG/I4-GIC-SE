@@ -7,8 +7,10 @@ import org.glassfish.jersey.inject.hk2.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import edu.itc.shop.domain.InMemoryProductRepository;
+import edu.itc.shop.domain.InMemoryReviewRepository;
 import edu.itc.shop.domain.ProductRepository;
 import edu.itc.shop.domain.ProductService;
+import edu.itc.shop.domain.ReviewRepository;
 
 public class Main {
     public static final URI BASE = URI.create("http://localhost:8080/api/");
@@ -17,6 +19,7 @@ public class Main {
     public static ResourceConfig config() {
         var repo = new InMemoryProductRepository();
         var service = new ProductService(repo);
+        var reviews = new InMemoryReviewRepository();
         return new ResourceConfig()
                 .packages("edu.itc.shop.api")
                 .register(new AbstractBinder() {
@@ -24,6 +27,7 @@ public class Main {
                     protected void configure() {
                         bind(repo).to(ProductRepository.class);
                         bind(service).to(ProductService.class);
+                        bind(reviews).to(ReviewRepository.class);
                     }
                 });
     }
