@@ -1,9 +1,18 @@
 package edu.itc.shop.domain;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
 
 public class ProductService {
+
+    private static final Map<String, Comparator<Product>> SORT_FIELDS = Map.of(
+            "name", Comparator.comparing(Product::name, String.CASE_INSENSITIVE_ORDER),
+            "price", Comparator.comparing(Product::price),
+            "stock", Comparator.comparingInt(Product::stock)
+    );
 
     private final ProductRepository repo;
 
@@ -13,6 +22,33 @@ public class ProductService {
 
     public List<Product> list() {
         return repo.findAll();
+    }
+
+    public List<Product> search(String q, Money minPrice, Money maxPrice, boolean inStock, String sortField, boolean descending) {
+        Comparator<Product> comparator = SORT_FIELDS.get(sortField);
+        if (comparator == null) {
+            throw new BadRequestException("Unknown sort field " + sortField);
+        }
+        if (descending) {
+            comparator = comparator.reversed();
+        }
+        validateEur(minPrice, "minPrice");
+        validateEur(maxPrice, "maxPrice");
+
+        String needle = (q == null || q.isBlank()) ? null : q.trim().toLowerCase();
+        return repo.findAll().stream()
+                .filter(p -> needle == null || p.name().toLowerCase().contains(needle))
+                .filter(p -> !inStock || p.stock() > 0)
+                .filter(p -> minPrice == null || p.price().compareTo(minPrice.amount()) >= 0)
+                .filter(p -> maxPrice == null || p.price().compareTo(maxPrice.amount()) <= 0)
+                .sorted(comparator)
+                .toList();
+    }
+
+    private static void validateEur(Money money, String paramName) {
+        if (money != null && !"EUR".equalsIgnoreCase(money.currency())) {
+            throw new BadRequestException(paramName + " must use EUR currency");
+        }
     }
 
     public Product get(long id) {

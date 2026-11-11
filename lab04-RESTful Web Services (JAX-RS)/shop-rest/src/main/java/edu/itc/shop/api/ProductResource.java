@@ -3,6 +3,8 @@ package edu.itc.shop.api;
 import java.net.URI;
 import java.util.List;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
@@ -11,9 +13,9 @@ import jakarta.ws.rs.core.UriInfo;
 
 import edu.itc.shop.api.dto.ProductDto;
 import edu.itc.shop.api.dto.StockChange;
+import edu.itc.shop.api.params.ProductFilter;
 import edu.itc.shop.domain.Product;
 import edu.itc.shop.domain.ProductService;
-import edu.itc.shop.domain.ProductRepository;
 
 @Path("/products")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -21,21 +23,18 @@ import edu.itc.shop.domain.ProductRepository;
 public class ProductResource {
 
     private final ProductService service;
-    //  private final ProductRepository repo;
 
     @Inject
-    public ProductResource(ProductService service, ProductRepository repo) {
+    public ProductResource(ProductService service) {
         this.service = service;
-        // this.repo = repo;
     }
 
     @GET
-    public List<ProductDto> list() {
-        return service.list().stream()
+    public List<ProductDto> list(@BeanParam @Valid ProductFilter f) {
+        return service.search(f.q, f.minPrice, f.maxPrice, f.inStock, f.sortField(), f.descending())
+                .stream()
                 .map(ProductDto::from)
                 .toList();
-    // public List<Product> list() {
-    //     return repo.findAll();
     }
 
     @GET
@@ -45,7 +44,7 @@ public class ProductResource {
     }
 
     @POST
-    public Response create(ProductDto dto, @Context UriInfo uriInfo) {
+    public Response create(@Valid @NotNull ProductDto dto, @Context UriInfo uriInfo) {
         Product saved = service.create(dto.toProduct(0, 0));
         URI location = uriInfo.getAbsolutePathBuilder()
                 .path(Long.toString(saved.id()))
@@ -57,7 +56,7 @@ public class ProductResource {
 
     @PUT
     @Path("{id: \\d+}")
-    public ProductDto update(@PathParam("id") long id, ProductDto dto) {
+    public ProductDto update(@PathParam("id") long id, @Valid @NotNull ProductDto dto) {
         Product updated = service.update(id, dto.toProduct(id, 0));
         return ProductDto.from(updated);
     }
@@ -72,7 +71,7 @@ public class ProductResource {
     @PATCH
     @Path("{id: \\d+}/stock")
     @Consumes(MediaType.APPLICATION_JSON)
-    public ProductDto changeStock(@PathParam("id") long id, StockChange change) {
+    public ProductDto changeStock(@PathParam("id") long id, @Valid @NotNull StockChange change) {
         Product updated = service.adjustStock(id, change.delta());
         return ProductDto.from(updated);
     }
