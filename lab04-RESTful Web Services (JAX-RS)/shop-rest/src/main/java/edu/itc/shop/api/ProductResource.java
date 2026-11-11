@@ -13,6 +13,7 @@ import edu.itc.shop.api.dto.ProductDto;
 import edu.itc.shop.api.dto.StockChange;
 import edu.itc.shop.domain.Product;
 import edu.itc.shop.domain.ProductService;
+import edu.itc.shop.domain.ProductRepository;
 
 @Path("/products")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -20,10 +21,12 @@ import edu.itc.shop.domain.ProductService;
 public class ProductResource {
 
     private final ProductService service;
+    //  private final ProductRepository repo;
 
     @Inject
-    public ProductResource(ProductService service) {
+    public ProductResource(ProductService service, ProductRepository repo) {
         this.service = service;
+        // this.repo = repo;
     }
 
     @GET
@@ -31,6 +34,8 @@ public class ProductResource {
         return service.list().stream()
                 .map(ProductDto::from)
                 .toList();
+    // public List<Product> list() {
+    //     return repo.findAll();
     }
 
     @GET
