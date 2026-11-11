@@ -36,7 +36,7 @@ public class DataSeeder implements ApplicationRunner {
         if (customers.count() > 0) return;
 
         // 3 Customers
-        Customer ada = customers.save(new Customer("Ada Lovelace", "ada@example.com",
+        Customer ada = customers.save(new Customer("Mouylang", "mouylang@example.com",
             new Address("10 St James", "London", "SW1"), new Address("10 St James", "London", "SW1")));
         Customer grace = customers.save(new Customer("Grace Hopper", "grace@example.com",
             new Address("Arlington Blvd", "Arlington", "VA"), new Address("Arlington Blvd", "Arlington", "VA")));
