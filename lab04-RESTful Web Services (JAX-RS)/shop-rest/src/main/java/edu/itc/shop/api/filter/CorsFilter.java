@@ -26,8 +26,8 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         res.getHeaders().putSingle("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
         res.getHeaders().putSingle("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE");
         res.getHeaders().putSingle("Access-Control-Allow-Headers",
-                "Content-Type,X-Api-Key,X-Correlation-Id,If-Match");
+                "Content-Type,X-Api-Key,X-Correlation-Id,If-Match,Idempotency-Key");
         res.getHeaders().putSingle("Access-Control-Expose-Headers",
-                "Location,ETag,Link,X-Total-Count,X-Correlation-Id");
+                "Location,ETag,Link,X-Total-Count,X-Correlation-Id,Idempotency-Replayed");
     }
 }
