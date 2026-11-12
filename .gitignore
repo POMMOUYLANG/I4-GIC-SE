@@ -23,6 +23,11 @@ lab01-multithreading/data/
 # Backups
 .git_backups/
 
+# Secrets & Environment Configs
+.env
+.env.*
+*-local.yml
+
 # Operating system files
 .DS_Store
 Thumbs.db
