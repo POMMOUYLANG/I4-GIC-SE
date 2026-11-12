@@ -1,33 +1,47 @@
-# Build outputs
+HELP.md
 target/
-**/target/
-build/
-**/build/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# Generated data
-lab01-multithreading/data/
-**/data/
-
-# IDE / Editor artifacts
-.idea/
-*.iml
-*.iws
-*.ipr
-.vscode/
+### STS ###
+.apt_generated
 .classpath
-.project
-.settings/
 .factorypath
-*.result
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# Backups
-.git_backups/
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
 
-# Secrets & Environment Configs
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/*
+!.vscode/settings.json
+
+### Secrets & Environment Configs ###
 .env
 .env.*
 *-local.yml
 
-# Operating system files
-.DS_Store
-Thumbs.db
+# Backups & Other Labs
+.git_backups/
+lab0*/
+Lab0*/
+chapter/
+lab/
+pdf/
