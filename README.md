@@ -496,6 +496,7 @@ When `spring-boot-starter-security` is added to the classpath with zero configur
      ```text
      Using generated security password: a1b2c3d4-e5f6-7890-abcd-ef1234567890
      ```
+   - *Note (Spring Boot 4.1.2 `--debug` observation):* Because `spring-boot-starter-security-oauth2-resource-server` is already included in `pom.xml`, `UserDetailsServiceAutoConfiguration`'s `MissingAlternativeUserDetailsManagerOrUserPropertiesConfigured` condition detects `OpaqueTokenIntrospector` on the classpath and skips generating the `user` password, while `SpringBootWebSecurityConfiguration` still secures all routes with `401 Unauthorized` + `WWW-Authenticate: Basic realm="Realm"`.
 
 ---
 
